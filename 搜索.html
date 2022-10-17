@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>搜索</title>
+		
+	</head>
+	<body>
+		<div id="box">
+			<p>
+				<input type="text" placeholder="请在此输入想要搜索的问题" name="" id="input-com" value="" />
+				<button id="an">搜索</button>
+			</p>
+			<ul id="conter"></ul>
+		</div>
+		<script type="text/javascript">
+			window.onload = function(){
+				var searchList = ["Q：具体时间是？<br> A：不知道","Q：地点在哪里？<br>A：我也不知道","Q：方式是什么？<br>A：我怎么知道？","Q：我是谁？<br>A：你是你","Q：我要干什么？<br>A：开心就好","Q：还有什么问题？<br>A：我想不出来啦","Q：振声苑在哪？<br>A：在图书馆西南方","Q：去哪里上课？<br>A：振声苑","Q：1+1=？<br>A：3","Q：若 3×8 矩阵 A 的秩为 3，求𝑑𝑖𝑚 𝑁𝑢𝑙 𝐴,𝑑𝑖𝑚 𝑅𝑜𝑤 𝐴和𝑟𝑎𝑛𝑘 𝐴<br>A：我不会啊"]
+				var oul = document.getElementById("conter");
+				document.getElementById("an").onclick = function(){
+					var inputcom = document.getElementById("input-com").value;
+					var a = [];
+					var k = 0;
+					for(var j = 0;j < searchList.length;j ++){
+						if(searchList[j].indexOf(inputcom) != -1){
+							a[k++] = searchList[j];
+						}
+					}
+					document.getElementById("conter").innerHTML = "";
+					for(var p = 0;p < a.length;p ++){
+						let oli = document.createElement("li");
+						oli.innerHTML = a[p];
+						oul.appendChild(oli);
+					}
+				};
+				for(var i = 0;i < searchList.length;i ++){
+					let oli = document.createElement("li");
+					oli.innerHTML = searchList[i];
+					oul.appendChild(oli);
+				}
+			}
+		</script>
+        <br><br>
+        <a href="index.html">
+        <button>返回</button>
+        </a>
+        <br><br>
+        <a href="http://81.68.101.47:8888/files#">
+        <button>更改/删除信息（bushi）</button>
+        </a>
+	</body>
+</html>
+
