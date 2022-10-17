@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh">
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>简单问答平台</title>
+</head>
+<body>
+    
+    <form name="input" target="iframeDisplay">
+        请提交问题&回答:
+        <br>
+        <input type="text" placeholder="在此填写问题" name="question" id="question">
+        <br>
+        <input type="text" placeholder="在此填写对应回答" name="answer" id="answer">
+        <input type="submit" value="上传" onclick="upload()">
+    </form>
+    <br>
+    <iframe id="iframeDisplay" name="iframe_display" style="display:none;"></iframe>
+    <!--<ol>
+        <li><input type="text" id="question"><input type="text" id="answer"></li>
+    </ol>
+    -->
+    
+    <br><br>
+    <ul id="conter"></ul>
+    
+
+<script>
+
+	/**
+	* @param name cookie的名称
+	* @param value cookie的值
+	* @param iDay cookie的有效期
+	*/
+    function creatCookie(name, value, iDay)
+    {
+        var oDate = new Date();
+        let time = oDate.getTime()+iDay*24*3600*1000;
+        oDate.setTime(time);
+        if(getCookie(name)==""){
+   	        document.cookie = name+'='+escape(value)+';expires='+oDate.toUTCString();
+        }else{
+        	value = value+'_#_'+getCookie(name);
+   	        document.cookie = name+'='+escape(value)+';expires='+oDate.toUTCString();
+        }
+    };
+
+    function getCookie(cname) {
+      let name = cname + "=";
+      let ca = document.cookie.split(';');
+      for(let i = 0; i < ca.length; i++) {
+         let c = ca[i];
+         //删除开头的空格
+         while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+         }
+	     if (c.indexOf(name) == 0) {
+    	   return unescape(c.substring(name.length, c.length));
+    	 } 
+  	  }
+	  return "";
+	};
+        
+    function upload(){
+        creatCookie('question', document.getElementById("question").value, 7);
+        creatCookie('answer', document.getElementById("answer").value, 7);
+        var question = getCookie("question");
+        var answer = getCookie("answer");
+        var oul = document.getElementById("conter");
+        let qs = question.split('_#_');
+        let vs = answer.split('_#_');
+        let html = '';
+        for(let i=0; i<qs.length; i++){
+        	html+='<li>'+qs[i]+'='+vs[i]+'</li><br>'
+        }
+        oul.innerHTML=html;
+        return false;
+    };
+</script>
+</body>
+</html>
