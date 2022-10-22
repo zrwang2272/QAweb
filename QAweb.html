@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="zh">
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Q&A搜索平台</title>
+    <style>
+
+        /** 总背景 整体设置**/
+        .container 
+        {
+            width: 60%;
+            margin: 10% auto 0;
+            background-color: #C0D9D9;
+            padding: 2% 5%;
+            border-radius: 10px;
+            /**overflow:scroll;**/
+            word-wrap:break-word;
+        }
+
+        ul 
+        {
+            padding-left: 20px;
+        }
+
+            ul li 
+            {
+                line-height: 2.3
+            }
+
+        a 
+        {
+            color: #20a53a
+        }
+        
+        /**标题（h1）阴影 字号 大小**/
+        h1
+        {
+            text-shadow: 5px 5px 5px #FFA500;
+            font-family:隶书;
+            font-size:50px;
+        }
+        
+        /**按钮设置**/
+        .button
+        {
+            width: 100%;
+            background-color: #5F9EA0;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        /**按钮的伪类选择器**/
+        .button:hover
+        {
+            background-color: #008B8B;
+        }
+        
+        /**表单的外部框架设置**/
+        .form 
+        {
+            border: 2px ;
+            padding: 10px;
+            border-radius: 40px 20px;
+        }
+        
+        /**图片设置**/
+        img 
+        {
+        border-radius: 8px;
+        margin: 0px 4px;
+        }
+        
+        /**表单及button设置**/
+        input[type=text], select 
+        {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        
+        input[type=number], select 
+        {
+            width: 27%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        input[type=submit] 
+        {
+            width: 100%;
+            background-color: #5F9EA0;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        input[type=submit]:hover
+        {
+            background-color: #008B8B;
+        }
+
+        div 
+        {
+            border-radius: 5px;
+            background-color: #F0FFFF;
+            padding: 20px;
+        }
+    </style>
+</head>
+
+
+
+<body>
+    
+    <div class="container">
+        
+        <!-- 图片及标题-->
+        <h1><img src="openlab.png" alt="openlab" width="120" height="120">&nbsp;&nbsp;Q & A 搜索平台</h1>
+        <br>
+        
+        <!-- 搜索部分-->
+        <div class="form">
+            <p>
+                问题搜索：
+                <input type="text" placeholder="请在此输入想要搜索的问题" name="" id="input-com" value="" />
+                <button class="button" id="an">搜索</button>
+            </p>
+        </div>
+        
+        <!-- 表格部分-->
+        <br><br>
+        <ul id="chart"></ul>
+        
+        <!--第二个表格用于搜索-->
+        <ul id="chart2"></ul>
+
+
+
+        <!-- 上传部分-->
+        <div class="form">
+            <br>
+            <form name="input" target="iframeDisplay" onsubmit="return false">
+                若需添加问答，请填写下方内容：
+                <br><br>
+                注意：请勿添加空信息！
+                <br><br>
+                Q：
+                <input type="text" placeholder="在此填写问题" name="question" id="question">
+                <br>
+                A：
+                <input type="text" placeholder="在此填写对应回答" name="answer" id="answer">
+                <br>
+                <input type="submit" value="上传" onclick="upload()" >
+            </form>
+        </div>
+
+
+
+        <!-- 修改部分-->
+        <br>
+        <div class="form">
+            <br>
+            <form name="alter" target="iframeDisplay" onsubmit="return false">
+                若需修改问答，请填写下方内容：
+                <br><br>
+                注意：
+                <br><br>1、请保证填写信息合理，出现修改成功的提示后，表示已成功修改数据；若弹出警告，请检查信息合理性。
+                <br><br>2、修改的条数请填写阿拉伯数字。
+                <br><br>3、非新增问答无法被修改。
+                <br><br>
+                修改第
+                <input type="number" placeholder="在此填写修改问答的条数"name="number" id="number">
+                条信息
+                <br><br>
+                Q：
+                <input type="text" placeholder="在此填写修改后的问题" name="requestion" id="requestion">
+                <br>
+                A：
+                <input type="text" placeholder="在此填写对应修改后的回答" name="reanswer" id="reanswer">
+                <br>
+                
+                <input type="submit" value="确认修改" onclick="rewrite()" >
+            </form>
+        </div>
+
+
+
+        <!-- 清空cookie部分-->
+        <br>
+        <div class="form">
+            <br>
+            <form target="iframeDisplay" onsubmit="return false">
+                若要清空问答，请填写下方内容：
+                <br><br>
+                请在下方输入“我已知晓并确定清空cookie”
+                <br>
+                表明您已知晓：我们将删除所有cookie（即您所有的提交数据），如因个人原因错误清除概不负责。
+                <br>
+                点击清空后，若出现一条提示弹窗，则表明清空成功，可直接继续添加或完成其他操作。
+                <br><br>
+                <input type="text" value="" placeholder="请在此输入确认内容" id="clear" name="ensure">
+                <br>
+                <input type="submit" value="清空" onclick="judge()" >
+                
+            </form>
+        </div>
+
+
+
+        <!-- 末尾图片-->
+        <br>
+        <img src="openlab2.png" alt="openlab2" width="71%" height="35%">
+        <!--525 280-->
+        </div>
+
+
+
+<script>
+
+    /*
+    *创建cookie
+    * @param name cookie的名称
+    * @param value cookie的值
+    * @param iDay cookie的有效期
+    * 检测空白填写，保证空白填写不被提交
+    */
+    function creatCookie(name, value, iDay)
+    {
+        var oDate = new Date();
+        let time = oDate.getTime()+iDay*24*3600*1000;
+        oDate.setTime(time);
+        if(document.getElementById("question").value!="" && document.getElementById("answer").value!="")
+        {
+           if(getCookie(name)=="")
+            {
+                document.cookie = name+'='+escape(value)+';expires='+oDate.toUTCString();
+            }
+            else
+            {
+                value = value+'_#_'+getCookie(name);
+                document.cookie = name+'='+escape(value)+';expires='+oDate.toUTCString();
+            }
+        }
+    };
+
+
+
+    /*同创建cookie，只是取消了判断输入是否为0，便于删除操作*/
+    function creatCookie2(name, value, iDay)
+    {
+        var oDate = new Date();
+        let time = oDate.getTime()+iDay*24*3600*1000;
+        oDate.setTime(time);
+        if(getCookie(name)=="")
+        {
+            document.cookie = name+'='+escape(value)+';expires='+oDate.toUTCString();
+        }
+        else
+        {
+            value = value+'_#_'+getCookie(name);
+            document.cookie = name+'='+escape(value)+';expires='+oDate.toUTCString();
+        } 
+        
+    };
+
+
+
+    /*同创建cookie,重新创建一个新的cookie，便于获取修改的信息进行rewrite*/
+    function creatCookie3(name, value, iDay)
+    {
+        var oDate = new Date();
+        let time = oDate.getTime()+iDay*24*3600*1000;
+        oDate.setTime(time);
+        if(document.getElementById("requestion").value!="" && document.getElementById("reanswer").value!="")
+        {
+                document.cookie = name+'='+escape(value)+';expires='+oDate.toUTCString();
+        }
+    };
+
+
+
+     /*同创建cookie，只是改为覆盖型cookie，便于rewrite，替换原来的cookie，name相同于1.2为同一个cookie*/
+    function creatCookie4(name, value, iDay)
+    {
+        var oDate = new Date();
+        let time = oDate.getTime()+iDay*24*3600*1000;
+        oDate.setTime(time);
+        document.cookie = name+'='+escape(value)+';expires='+oDate.toUTCString();
+    };
+
+
+
+    /*
+    获取cookie
+    */
+    function getCookie(cname)
+    {
+        let name = cname + "=";
+        let ca = document.cookie.split(';');
+        for(let i = 0; i < ca.length; i++) 
+        {
+            let c = ca[i];
+            //删除开头的空格
+            while (c.charAt(0) == ' ')
+            {
+                c = c.substring(1);
+            }
+        if (c.indexOf(name) == 0)
+        {
+            return unescape(c.substring(name.length, c.length));
+        }
+    }
+    return "";
+    };
+
+
+
+    /*
+    上传cookie中的信息并且显示出来
+    */
+    function upload()
+    {
+        creatCookie('question', document.getElementById("question").value, 7);
+        creatCookie('answer', document.getElementById("answer").value, 7);
+        var question = getCookie("question");
+        var answer = getCookie("answer");
+        var oul = document.getElementById("chart");
+        let qs = question.split('_#_');
+        let vs = answer.split('_#_');
+        let html = '';
+        for(let i=0; i<qs.length; i++)
+        {
+            html+='<li>'+'Q：'+qs[i]+'<br>'+'A：'+vs[i]+'</li><br>'
+        }
+        oul.innerHTML=html;
+        var testquestion=document.getElementById("question").value;
+        var testanswer=document.getElementById("answer").value;
+        if(document.getElementById("question").value!="" && document.getElementById("answer").value!="")
+        {
+            alert("信息提交成功！");
+        }
+        else
+        {
+            alert("请勿提交空信息！");
+        }
+        /*后面所有相似的为清空表单内的数据*/
+        document.getElementById("question").value="";
+        document.getElementById("answer").value="";
+        return false;
+    };
+
+
+
+    /**这里只是取消掉alert弹窗，便于其他功能的引用*/
+    function upload2()
+    {
+        creatCookie('question', document.getElementById("question").value, 7);
+        creatCookie('answer', document.getElementById("answer").value, 7);
+        var question = getCookie("question");
+        var answer = getCookie("answer");
+        var oul = document.getElementById("chart");
+        let qs = question.split('_#_');
+        let vs = answer.split('_#_');
+        let html = '';
+        for(let i=0; i<qs.length; i++)
+        {
+            html+='<li>'+'Q：'+qs[i]+'<br>'+'A：'+vs[i]+'</li><br>'
+        }
+        oul.innerHTML=html;
+        return false;
+    };
+
+
+
+    /*自动刷新出现的部分，以及搜索功能*/
+    window.onload = function()
+    {
+        if(getCookie("question")=="")
+        {
+            var oul = document.getElementById("chart");
+            let html = '';
+            oul.innerHTML=html;
+        }
+        else
+        {
+        upload2();
+        }
+        
+        var searchList = ["Q：振声苑在哪？<br>A：在图书馆西南方","Q：去哪里上课？<br>A：振声苑","Q：具体时间是？<br> A：不知道","Q：地点在哪里？<br>A：我也不知道","Q：方式是什么？<br>A：我怎么知道？","Q：我是谁？<br>A：你是你","Q：我要干什么？<br>A：开心就好","Q：还有什么问题？<br>A：我想不出来啦","Q：1+1=？<br>A：3","Q：若 3×8 矩阵 A 的秩为 3，求𝑑𝑖𝑚 𝑁𝑢𝑙 𝐴,𝑑𝑖𝑚 𝑅𝑜𝑤 𝐴和𝑟𝑎𝑛𝑘 𝐴<br>A：我不会啊","Q：若 m × n 矩阵 A 的列生成 Rm，则对 Rm 中任意的 b，方程 Ax = b 相容.<br>A：我不到啊","Q：证明：(1) 两个或多个向量的集合 S = {v1, ..., vp} 线性相关，当且仅当 S 中至少有一个向量是其他向量的线性组合. <br>A：(2) 事实上，若 S 线性相关，且 v1 ̸ = 0，则某个 vj (j > 1) 是它前面几个向量的线性组合."]
+
+
+        var Oul = document.getElementById("chart2");
+        document.getElementById("an").onclick = function()
+        {
+            var inputcom = document.getElementById("input-com").value;
+            var a = [];
+            var k = 0;
+            for(var j = 0;j < searchList.length;j ++)
+            {
+                if(searchList[j].indexOf(inputcom) != -1)
+                {
+                    a[k++] = searchList[j];
+                }
+            }
+            document.getElementById("chart2").innerHTML = "";
+            for(var p = 0;p < a.length;p ++)
+            {
+                let Oli = document.createElement("li");
+                Oli.innerHTML = a[p];
+                Oul.appendChild(Oli);
+            }
+        };
+        for(var i = 0;i < searchList.length;i ++)
+        {
+            let Oli = document.createElement("li");
+            Oli.innerHTML = searchList[i];
+            Oul.appendChild(Oli);
+        }
+        
+    };
+
+
+
+    /**判断清空cookie的填入内容是否符合要求，并确定是否清空
+    *利用过期时间，进行覆盖
+    **/
+    function judge()
+    {
+        if(document.getElementById("clear").value=="我已知晓并确定清空cookie")
+        {
+            creatCookie2('question', document.getElementById("question").value, -7);
+            creatCookie2('answer', document.getElementById("answer").value, -7);
+            var oul = document.getElementById("chart");
+            let html = '';
+            oul.innerHTML=html;
+            alert("信息删除成功！");
+            document.getElementById("clear").value="";
+            return false;
+        }
+        else
+        {
+            alert("信息删除失败！请确认填写内容的正确性！");
+            document.getElementById("clear").value="";
+        }
+    };
+
+
+
+    /*修改功能*/
+    function rewrite()
+    {
+        
+        /*读取修改的信息以及原有cookie*/
+        creatCookie3('requestion', document.getElementById("requestion").value, 7);
+        creatCookie3('reanswer', document.getElementById("reanswer").value, 7);
+        var question = getCookie("question");
+        var answer = getCookie("answer");
+        var requestion = getCookie("requestion");
+        var reanswer = getCookie("reanswer");
+        var oul = document.getElementById("chart");
+        /*将原有cookie拆分*/
+        let qs = question.split('_#_');
+        let vs = answer.split('_#_');
+        
+        /*判断信息条数的合理性*/
+        if(document.getElementById("number").value<1 || document.getElementById("number").value> qs.length || document.getElementById("number").value % 1 !=0 || document.getElementById("question").value=="" || document.getElementById("answer").value=="")
+        {
+            alert("警告：填写数据有误，请填写合理信息或请勿填写空信息！")
+            document.getElementById("number").value="";
+            document.getElementById("reanswer").value="";
+            document.getElementById("requestion").value="";
+        }
+        else
+        {
+            /*替换对应的cookie*/
+            qs[document.getElementById("number").value -1]=requestion;
+            vs[document.getElementById("number").value -1]=reanswer;
+            
+            /*最终显示出来*/
+            let html = '';
+            for(let j=0; j<qs.length; j++)
+            {
+                html+='<li>'+'Q：'+qs[j]+'<br>'+'A：'+vs[j]+'</li><br>'
+            }
+        
+            oul.innerHTML=html;
+        
+            /*信息重新组合*/
+            let newquestion='';
+            let newanswer='';
+            for(let i=0; i<qs.length -1; i++)
+            {
+                newquestion +=qs[i]+'_#_' ;
+                newanswer +=vs[i]+'_#_' ;
+            }
+            newquestion +=qs[qs.length -1] ;
+            newanswer +=vs[vs.length -1] ;
+        
+            /*覆盖原有cookie*/
+            creatCookie4('question', newquestion, 7);
+            creatCookie4('answer', newanswer, 7);
+            alert("信息修改成功！");
+            document.getElementById("number").value="";
+            document.getElementById("reanswer").value="";
+            document.getElementById("requestion").value="";
+            return false;
+        }
+    };
+
+</script>
+</body>
+</html>
